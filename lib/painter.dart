@@ -96,7 +96,12 @@ class _PainterPainter extends CustomPainter {
   }
 }
 
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+
 class _PathHistory {
+  var redoPath = [];
   List<MapEntry<Path, Paint>> _paths;
   Paint currentPaint;
   Paint _backgroundPaint;
@@ -119,13 +124,28 @@ class _PathHistory {
 
   void undo() {
     if (!_inDrag) {
+      if(_paths.isNotEmpty){
+        redoPath.add(_paths.last);
+      }
       _paths.removeLast();
+      print("elements are ${redoPath.length}");
+      print("_paths elements are ${_paths.length}");
     }
+  }
+
+  void redo(){
+    _paths.add(redoPath.last);
+    redoPath.removeLast();
+    print("redo path are ${redoPath.length}");
+    print("_paths elements are ${_paths.length}");
   }
 
   void clear() {
     if (!_inDrag) {
       _paths.clear();
+      redoPath.clear();
+      print("elements of undo ${_paths.length}");
+      print("elements of redo ${redoPath.length}");
     }
   }
 
